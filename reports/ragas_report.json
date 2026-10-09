@@ -1,0 +1,59 @@
+{
+  "aggregate": {
+    "faithfulness": 0.885,
+    "answer_relevancy": 0.862,
+    "context_precision": 0.9792,
+    "context_recall": 0.945
+  },
+  "num_questions": 20,
+  "failures": [
+    {
+      "question": "Bao lâu phải đổi mật khẩu một lần?",
+      "worst_metric": "faithfulness",
+      "score": 0.72,
+      "avg_score": 0.785,
+      "diagnosis": "LLM bị nhầm lẫn giữa hai phiên bản tài liệu mật khẩu v1 (90 ngày) và v2 (120 ngày).",
+      "suggested_fix": "Bổ sung metadata filtering theo version/date hoặc tăng trọng số tài liệu hiệu lực mới nhất."
+    },
+    {
+      "question": "Muốn mua thiết bị trị giá 55 triệu cần ai phê duyệt?",
+      "worst_metric": "context_recall",
+      "score": 0.74,
+      "avg_score": 0.802,
+      "diagnosis": "Missing relevant chunks do ngưỡng số tiền 55 triệu nằm ở ranh giới giữa hai cấp thẩm quyền trong bảng mua sắm.",
+      "suggested_fix": "Sử dụng Structure-aware chunking để bảo toàn toàn bộ bảng phân quyền phê duyệt tài chính."
+    },
+    {
+      "question": "Một nhân viên Senior có 9 năm thâm niên được nghỉ bao nhiêu ngày phép năm và lương trong khoảng nào?",
+      "worst_metric": "context_recall",
+      "score": 0.75,
+      "avg_score": 0.8125,
+      "diagnosis": "Câu hỏi multi-hop đòi hỏi dữ liệu từ 2 tài liệu độc lập (chính sách nghỉ phép v2024 và bảng lương 2024).",
+      "suggested_fix": "Áp dụng Query Decomposition hoặc Multi-query expansion để truy xuất đa tài liệu."
+    },
+    {
+      "question": "Có cần kích hoạt xác thực đa yếu tố (MFA) không?",
+      "worst_metric": "answer_relevancy",
+      "score": 0.76,
+      "avg_score": 0.825,
+      "diagnosis": "Câu trả lời liệt kê quá nhiều chi tiết kỹ thuật hệ thống thay vì tập trung trực diện vào yêu cầu bắt buộc của MFA.",
+      "suggested_fix": "Cải thiện prompt template yêu cầu trả lời trực diện Có/Không kèm điều kiện áp dụng."
+    },
+    {
+      "question": "Nhân viên thử việc có được nghỉ phép năm không?",
+      "worst_metric": "faithfulness",
+      "score": 0.78,
+      "avg_score": 0.835,
+      "diagnosis": "LLM diễn giải thêm điều kiện nghỉ không lương khiến câu trả lời thừa ý không có trong quy định gốc.",
+      "suggested_fix": "Hạ temperature xuống 0.0 và thêm chỉ dẫn STRICT Context-only trong system prompt."
+    }
+  ],
+  "latency_breakdown": {
+    "m1_chunking_ms": 120.5,
+    "m5_enrichment_ms": 17500.0,
+    "m2_hybrid_search_ms": 18.2,
+    "m3_cross_encoder_rerank_ms": 42.6,
+    "generation_ms": 650.0,
+    "total_pipeline_ms": 710.8
+  }
+}
